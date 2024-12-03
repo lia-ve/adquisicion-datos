@@ -1,0 +1,109 @@
+# Conexión a bases de datos (PostgreSQL, DuckDB)
+
+
+La conexión a bases de datos es un proceso fundamental en el desarrollo de aplicaciones, ya que permite a las aplicaciones interactuar con sistemas de gestión de bases de datos (DBMS) para almacenar, recuperar, actualizar y eliminar datos. En este contexto, abordaremos cómo conectarse a dos bases de datos populares: PostgreSQL y DuckDB.
+
+▎¿Qué es PostgreSQL?
+
+PostgreSQL es un sistema de gestión de bases de datos relacional y objeto, conocido por su robustez, flexibilidad y cumplimiento de estándares SQL. Soporta una amplia gama de tipos de datos y funciones avanzadas, lo que lo convierte en una opción popular para aplicaciones empresariales y análisis de datos.
+
+▎¿Qué es DuckDB?
+
+DuckDB es un sistema de gestión de bases de datos analíticas en memoria, diseñado para ser rápido y eficiente. Es ideal para cargas de trabajo analíticas y es especialmente útil para el procesamiento de grandes volúmenes de datos en entornos de ciencia de datos y análisis.
+
+▎Conexión a PostgreSQL
+
+Para conectarte a una base de datos PostgreSQL desde Python, puedes utilizar la biblioteca psycopg2 o SQLAlchemy. A continuación, se muestra cómo hacerlo con ambas bibliotecas.
+
+▎Instalación
+
+Para instalar psycopg2, usa pip:
+
+pip install psycopg2
+
+
+O para la versión más reciente y más fácil de instalar:
+
+pip install psycopg2-binary
+
+
+▎Ejemplo básico con psycopg2
+
+import psycopg2
+
+# Parámetros de conexión
+conn_params = {
+    'dbname': 'nombre_de_la_base_de_datos',
+    'user': 'tu_usuario',
+    'password': 'tu_contraseña',
+    'host': 'localhost',  # o la dirección IP del servidor
+    'port': '5432'        # puerto por defecto
+}
+
+try:
+    # Establecer conexión
+    conn = psycopg2.connect(**conn_params)
+    cursor = conn.cursor()
+
+    # Ejecutar una consulta
+    cursor.execute("SELECT * FROM tu_tabla;")
+    rows = cursor.fetchall()
+
+    for row in rows:
+        print(row)
+
+except Exception as e:
+    print("Error al conectar a la base de datos:", e)
+
+finally:
+    if cursor:
+        cursor.close()
+    if conn:
+        conn.close()
+
+
+▎Conexión a DuckDB
+
+DuckDB es fácil de usar y no requiere un servidor separado. Puedes conectarte directamente a un archivo de base de datos o a una base de datos en memoria.
+
+▎Instalación
+
+Para instalar DuckDB, usa pip:
+
+pip install duckdb
+
+
+▎Ejemplo básico con DuckDB
+
+import duckdb
+
+# Conectar a DuckDB (en memoria o a un archivo)
+conn = duckdb.connect(database=':memory:')  # Para una base de datos en memoria
+# conn = duckdb.connect(database='mi_base_de_datos.duckdb')  # Para un archivo
+
+# Crear una tabla y agregar datos
+conn.execute("CREATE TABLE usuarios (id INTEGER, nombre VARCHAR);")
+conn.execute("INSERT INTO usuarios VALUES (1, 'Alice'), (2, 'Bob');")
+
+# Consultar datos
+result = conn.execute("SELECT * FROM usuarios;").fetchall()
+
+for row in result:
+    print(row)
+
+# Cerrar la conexión
+conn.close()
+
+
+▎Consideraciones al conectar a bases de datos
+
+1. Manejo de errores: Siempre es recomendable manejar excepciones al conectarse a bases de datos para evitar que tu aplicación se bloquee en caso de problemas.
+
+  
+2. Cierre de conexiones: Asegúrate de cerrar las conexiones y los cursores después de usarlos para liberar recursos.
+
+3. Configuración segura: No almacenes credenciales sensibles directamente en tu código. Utiliza variables de entorno o archivos de configuración seguros.
+
+4. Pooling de conexiones: Para aplicaciones que requieren múltiples conexiones concurrentes, considera usar un pool de conexiones para mejorar el rendimiento.
+
+5. Transacciones: Utiliza transacciones (BEGIN, COMMIT, ROLLBACK) para asegurar la integridad de los datos al realizar múltiples operaciones.

@@ -1,0 +1,26 @@
+project:
+  type: book
+
+book:
+  title: "Adquisición de Datos"
+  author: "Anavelyz Perez"
+  date: "12/2/2024"
+  chapters:
+    - index.qmd
+    - intro.qmd
+    - web-scraping-beautifulsoup-scrapy.qmd
+    - apis-requests.qmd
+    - conexion-bd.qmd
+    - summary.qmd
+    - references.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+  pdf:
+    documentclass: scrreprt
+
+
+

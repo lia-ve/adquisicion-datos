@@ -1,0 +1,99 @@
+# Web scraping con BeautifulSoup y Scrapy
+
+▎¿Qué es el Web Scraping?
+
+El web scraping es el proceso de extraer información de sitios web. Esto se puede hacer de varias maneras, pero dos de las herramientas más populares en Python son BeautifulSoup y Scrapy.
+
+▎BeautifulSoup
+
+BeautifulSoup es una biblioteca de Python que facilita la extracción de datos de archivos HTML y XML. Se utiliza comúnmente en combinación con otras bibliotecas como requests para obtener el contenido de una página web.
+
+▎Instalación
+
+Primero, necesitas instalar las bibliotecas necesarias. Puedes hacerlo usando pip:
+
+pip install beautifulsoup4 requests
+
+
+▎Ejemplo básico con BeautifulSoup
+
+1. Importar las bibliotecas necesarias:
+
+import requests
+from bs4 import BeautifulSoup
+
+
+2. Hacer una solicitud a la página web:
+
+url = 'https://example.com'  # Reemplaza con la URL que deseas scrape
+response = requests.get(url)
+
+
+3. Crear un objeto BeautifulSoup:
+
+soup = BeautifulSoup(response.text, 'html.parser')
+
+
+4. Extraer información:
+
+Supongamos que quieres extraer todos los títulos de los artículos en un blog:
+
+titles = soup.find_all('h2')  # Cambia 'h2' por la etiqueta correspondiente
+for title in titles:
+    print(title.text)
+
+
+▎Scrapy
+
+Scrapy es un framework más robusto para realizar web scraping. Es ideal para proyectos más grandes y complejos.
+
+▎Instalación
+
+Instala Scrapy usando pip:
+
+pip install scrapy
+
+
+▎Crear un proyecto Scrapy
+
+1. Crear un nuevo proyecto:
+
+Abre tu terminal y ejecuta:
+
+scrapy startproject nombre_del_proyecto
+
+
+Esto creará una carpeta con la estructura básica del proyecto.
+
+2. Crear un spider:
+
+Navega a la carpeta del proyecto y crea un nuevo spider:
+
+cd nombre_del_proyecto
+scrapy genspider nombre_del_spider example.com  # Reemplaza con la URL deseada
+
+
+3. Definir el spider:
+
+Abre el archivo del spider generado en spiders/nombre_del_spider.py y edítalo:
+
+import scrapy
+
+class NombreDelSpider(scrapy.Spider):
+    name = 'nombre_del_spider'
+    start_urls = ['https://example.com']  # URL inicial
+
+    def parse(self, response):
+        titles = response.css('h2::text').getall()  # Cambia 'h2' por la etiqueta correspondiente
+        for title in titles:
+            yield {'title': title}  # Devuelve los títulos como diccionarios
+
+
+4. Ejecutar el spider:
+
+Desde la terminal, en la carpeta del proyecto, ejecuta:
+
+scrapy crawl nombre_del_spider -o output.json
+
+
+Esto guardará los resultados en un archivo output.json.

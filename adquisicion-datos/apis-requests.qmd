@@ -1,0 +1,151 @@
+# APIs y requests
+▎¿Qué es una API?
+
+Una API (Application Programming Interface) es un conjunto de reglas y protocolos que permite que diferentes aplicaciones se comuniquen entre sí. Las APIs son utilizadas para permitir que los desarrolladores accedan a las funcionalidades o datos de una aplicación, servicio o sistema operativo.
+
+▎Tipos de APIs
+
+1. APIs REST: Utilizan HTTP y son basadas en recursos. Los datos son enviados y recibidos en formato JSON o XML.
+
+2. APIs SOAP: Protocolo más antiguo que utiliza XML para el intercambio de datos y suele ser más complejo.
+
+3. GraphQL: Un lenguaje de consulta para APIs que permite a los clientes solicitar exactamente los datos que necesitan.
+
+▎¿Qué es una solicitud HTTP?
+
+Las solicitudes HTTP son cómo los clientes (como tu navegador o un script) piden información a un servidor. Hay varios métodos HTTP, pero los más comunes son:
+
+• GET: Solicita datos del servidor.
+
+• POST: Envía datos al servidor.
+
+• PUT: Actualiza datos existentes en el servidor.
+
+• DELETE: Elimina datos del servidor.
+
+▎Uso de la biblioteca requests
+
+La biblioteca requests es una de las más populares para hacer solicitudes HTTP en Python. Es fácil de usar y ofrece una gran cantidad de funcionalidades.
+
+▎Instalación
+
+Para instalar requests, puedes usar pip:
+
+pip install requests
+
+
+▎Ejemplo básico de uso
+
+1. Importar la biblioteca:
+
+import requests
+
+
+2. Hacer una solicitud GET:
+
+response = requests.get('https://api.example.com/data')  # Reemplaza con una URL real
+
+
+3. Verificar el estado de la respuesta:
+
+if response.status_code == 200:
+    print("Éxito:", response.json())  # Devuelve la respuesta en formato JSON
+else:
+    print("Error:", response.status_code)
+
+
+4. Hacer una solicitud POST:
+
+Si necesitas enviar datos, puedes usar el método POST. Por ejemplo, enviando un JSON:
+
+data = {'key': 'value'}  # Datos a enviar
+response = requests.post('https://api.example.com/data', json=data)
+
+if response.status_code == 201:
+    print("Datos creados:", response.json())
+else:
+    print("Error:", response.status_code)
+
+
+▎Manejo de parámetros en las solicitudes
+
+Puedes enviar parámetros en la URL usando el argumento params:
+
+params = {'param1': 'value1', 'param2': 'value2'}
+response = requests.get('https://api.example.com/data', params=params)
+
+
+▎Encabezados (Headers)
+
+A veces, necesitas enviar encabezados personalizados, como tokens de autenticación:
+
+headers = {'Authorization': 'Bearer YOUR_TOKEN'}
+response = requests.get('https://api.example.com/protected', headers=headers)
+
+
+▎Manejo de errores
+
+Es importante manejar errores adecuadamente al trabajar con APIs. Puedes usar bloques try-except para capturar excepciones:
+
+try:
+    response = requests.get('https://api.example.com/data')
+    response.raise_for_status()  # Lanza un error si la respuesta no es 200
+    data = response.json()
+except requests.exceptions.HTTPError as err:
+    print("Error HTTP:", err)
+except Exception as e:
+    print("Error:", e)
+
+
+▎Autenticación
+
+Las APIs pueden requerir diferentes métodos de autenticación, como:
+
+• Basic Auth:
+
+from requests.auth import HTTPBasicAuth
+
+response = requests.get('https://api.example.com/data', auth=HTTPBasicAuth('user', 'pass'))
+
+
+• Token Bearer:
+
+headers = {'Authorization': 'Bearer YOUR_ACCESS_TOKEN'}
+response = requests.get('https://api.example.com/data', headers=headers)
+
+
+▎Ejemplo completo
+
+Aquí hay un ejemplo completo que combina varios conceptos:
+
+import requests
+
+# URL de la API
+url = 'https://api.example.com/data'
+
+# Parámetros y encabezados
+params = {'search': 'query'}
+headers = {'Authorization': 'Bearer YOUR_TOKEN'}
+
+try:
+    # Hacer una solicitud GET
+    response = requests.get(url, params=params, headers=headers)
+        response.raise_for_status()  # Verifica que la solicitud fue exitosa
+
+    # Procesar la respuesta
+    data = response.json()
+    print("Datos recibidos:", data)
+
+except requests.exceptions.HTTPError as err:
+    print("Error HTTP:", err)
+except Exception as e:
+    print("Error:", e)
+
+
+▎Consideraciones finales
+
+• Documentación: Siempre revisa la documentación de la API que estás utilizando para entender cómo interactuar con ella correctamente.
+
+• Límites de tasa (Rate Limiting): Muchas APIs tienen límites sobre cuántas solicitudes puedes hacer en un período determinado.
+
+• Formato de datos: Familiarízate con el formato de datos que la API utiliza (JSON, XML, etc.).
